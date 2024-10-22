@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=teste123
+      - MYSQL_DATABASE=ASPNET
+      - MYSQL_USER=lima
+      - MYSQL_PASSWORD=Fiap@csharp
+    ports:
+      - "3306:3306"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "lima", "-pFiap@csharp"]
+      interval: 30s
+      timeout: 30s
+      retries: 10
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - mysql-backup:/var/lib/mysql-files  # Se você quiser ter um backup
+
+  asp-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - backend
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+
+volumes:
+  mysql-data:
+  mysql-backup:
+
+networks:
+  backend:
+    driver: bridge
