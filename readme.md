@@ -24,4 +24,4 @@ docker compose up
 
 ### Passo 4: Acessar o banco de dados e criar as sequences
 
-Acesse o banco de dados com o usuário "c##batata" senha "batata123" e execute o script sequences.sql
+Banco de Dados = Teste Azure
